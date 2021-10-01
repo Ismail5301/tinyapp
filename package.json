@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Ismail5301/tinyapp/issues"
   },
-  "homepage": "https://github.com/Ismail5301/tinyapp#readme"
+  "homepage": "https://github.com/Ismail5301/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
