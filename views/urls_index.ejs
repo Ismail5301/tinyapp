@@ -20,6 +20,8 @@
           <a class="nav-item nav-link" href="/urls">My URLs</a>
           <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
         </div>
+        <form method="POST" action="/urls/9sm5xK/delete">
+        </form>
       </div>
     </nav>
   </header>
@@ -37,7 +39,15 @@
           <tr>
             <td><%= url %></td>
             <td><%= urls[url] %></td>
-          </tr>
+            <td>
+              <a href="/urls/<%= url %>"> <button> Edit </button> </a>
+            </td>
+            <td>
+              <form method="POST" action="/urls/<%= url %>/delete">
+                <button type="submit" class="btn btn-outline-danger">Delete</button>
+              </form>
+            </td>
+            </tr>
         <% } %>
       </tbody>
     </table>
