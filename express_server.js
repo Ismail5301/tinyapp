@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
 
@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
   keys: ['234x0sdf8casdf9', '4kjdfd989sdf2e4'],
-  maxAge: 24 * 60 * 60* 1000
+  maxAge: 24 * 60 * 60 * 1000
 }));
 
 //Importing helper functions from helpers.js
@@ -22,15 +22,15 @@ const urlDatabase = {
   "9sm5xK": { longURL : "http://www.google.com" , userID: "user2RandomID"}
 };
 
-const users = { 
+const users = {
   "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
+    id: "userRandomID",
+    email: "user@example.com",
     password: bcrypt.hashSync("2", saltRounds)
   },
- "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
+  "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
     password: bcrypt.hashSync("2", saltRounds)
   }
 };
@@ -38,7 +38,7 @@ const users = {
 
 app.get("/urls/new", (req, res) => {
   const templateVars = {user : users[req.session["userID"]]};
-  if (!req.session.userID){  // Send back to login page if user is not logged in
+  if (!req.session.userID) {  // Send back to login page if user is not logged in
     res.redirect("/login");
   }
   res.render("urls_new", templateVars);
@@ -46,7 +46,7 @@ app.get("/urls/new", (req, res) => {
 
 
 app.get("/urls", (req, res) => {
-  const templateVars = { 
+  const templateVars = {
     urls: getUserURLs(req.session["userID"], urlDatabase),
     user: users[req.session["userID"]]
   };
@@ -62,10 +62,10 @@ app.post("/url/:id", (req, res) => {
   } else {
     res.status(403).send("No permission for this action");
   }
-})
+});
 
 app.get("/urls/:shortURL", (req, res) => {
-   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.session["userID"]]};
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[req.session["userID"]]};
   res.render("urls_show", templateVars);
 });
 
@@ -73,17 +73,16 @@ app.post("/urls/:shortURL", (req, res) => {
   const {longURL} = req.body;
   urlDatabase[req.params.shortURL].longURL = longURL;
   res.redirect("/urls");
-})
+});
 
 // Deleting the URL
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  if (urlDatabase[req.params.shortURL].userID === req.session["userID"]){
-  delete urlDatabase[shortURL];
-  res.redirect("/urls");
-  } else {
+  if (urlDatabase[req.params.shortURL].userID !== req.session["userID"]) {
     res.status(403).send("No permission for this action");
   }
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -129,7 +128,7 @@ app.post("/register", (req, res) => {
     res.status(400).send("400 error ! Please Login");
   }
 });
-//Login process 
+//Login process
 app.get("/login", (req, res) => {
   const templateVars = {
     user : users[req.session["userID"]]
@@ -163,5 +162,4 @@ app.post("/logout" , (req, res) => {
 app.listen(PORT, () => {
   console.log(`Tinyapp listening on port ${PORT}!`);
 });
-
 
